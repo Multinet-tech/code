@@ -1,0 +1,127 @@
+{
+  "project_name": "Futuristic Interactive Hub",
+  "theme_strategy": {
+    "theme": "dark",
+    "archetype": "7 (Electric & Neon)",
+    "vibe": "Godlike sci-fi interface, high-contrast neon minimalism, digital playground",
+    "reasoning": "The user requested a 'fancy and animatic' futuristic/tech theme with neon effects, featuring interactive games and a cloud drive link. Archetype 7 provides the intense, glowing, and highly interactive digital canvas required for this experience."
+  },
+  "colors": {
+    "background": {
+      "base": "#05050A",
+      "surface": "#0B0C10",
+      "surface_glass": "rgba(11, 12, 16, 0.6)"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#9CA3AF",
+      "accent": "#01FFC3"
+    },
+    "accents": {
+      "cyan": "#05D9E8",
+      "hot_pink": "#FF2A6D",
+      "laser_green": "#01FFC3",
+      "cyber_yellow": "#F2E94E"
+    },
+    "borders": {
+      "default": "rgba(255, 255, 255, 0.1)",
+      "hover_glow": "rgba(5, 217, 232, 0.5)"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "headings": "'Unbounded', sans-serif",
+      "body": "'JetBrains Mono', monospace"
+    },
+    "rules": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter uppercase",
+      "h2": "text-2xl sm:text-3xl font-bold tracking-tight uppercase",
+      "h3": "text-xl font-bold tracking-tight",
+      "body": "text-sm sm:text-base leading-relaxed tracking-wide",
+      "overline": "text-xs font-bold tracking-[0.2em] uppercase text-laser_green"
+    }
+  },
+  "layout_and_spacing": {
+    "strategy": "MODE A: THE 'TETRIS' GRID (Bento Grid Layout)",
+    "container": "w-full max-w-7xl mx-auto px-6 py-12 md:py-24",
+    "grid_structure": "grid grid-cols-1 md:grid-cols-8 lg:grid-cols-12 gap-6 md:gap-8",
+    "bento_spans": {
+      "multidrive_hero": "col-span-1 md:col-span-8 lg:col-span-8 row-span-2",
+      "game_card_square": "col-span-1 md:col-span-4 lg:col-span-4 row-span-1",
+      "game_card_wide": "col-span-1 md:col-span-4 lg:col-span-6 row-span-1"
+    },
+    "spacing_rules": "Use generous padding inside cards (p-6 to p-8) to give text and content breathing room. Avoid centering everything; use aggressive asymmetry and sharp left-alignments for technical readouts."
+  },
+  "components_and_features": {
+    "background": {
+      "library": "react-tsparticles",
+      "configuration": "Dark void with subtle cyan and magenta glowing nodes that react to mouse hover (repulse or connect lines). Must feel like a high-end digital matrix."
+    },
+    "cards_surfaces": {
+      "style": "The 'Tracing Beam' / Terminal look",
+      "implementation": "Cards should have a solid dark background (#0B0C10) with a 1px border. On hover, apply a glowing neon box-shadow or a framer-motion animated gradient border to simulate a trace beam. Content inside should slightly scale up or shift on hover."
+    },
+    "multidrive_button": {
+      "interaction": "Clicking opens a Shadcn UI Dialog (Modal).",
+      "modal_content": "Displays a futuristic loading sequence with 'Powered by MultiNet' in kinetic typography, followed by a simulated redirect or a glowing confirmation button linking to 'cloud.multifocus.com'."
+    },
+    "games_integration": {
+      "types": [
+        "Memory Match (Puzzle)",
+        "Neon Snake (Arcade)",
+        "Whack-a-node (Reflex)",
+        "Dice Roller (Casual)"
+      ],
+      "interaction": "Each game is represented as a glowing Bento Grid card. Clicking a card opens a full-screen or large Shadcn Dialog containing the actual playable React game component."
+    }
+  },
+  "motion_and_interactions": {
+    "libraries": ["framer-motion", "react-tsparticles"],
+    "global": "Smooth scrolling, elements fade and slide up on scroll via framer-motion.",
+    "hover_states": "Magnetic button effect on major CTAs. Cards receive a pronounced glow (e.g., drop-shadow-[0_0_15px_rgba(5,217,232,0.5)]) and border color change on hover.",
+    "kinetic_typography": "Text split animations on headings where characters slide in sequentially on load."
+  },
+  "image_urls": [
+    {
+      "slug": "hero_bg",
+      "url": "https://static.prod-images.emergentagent.com/jobs/e0594913-dd3e-46c5-b22b-974ab9719c81/images/5d75fc0634717bde02dd1d6fd068d3e1b72c6676ec8dab5615941f4fd7cdf4e0.png",
+      "description": "Abstract neon 3D background. Can be used as a heavy background texture or layered within the MultiDrive hero card with low opacity (e.g., opacity-20) to add depth.",
+      "category": "background"
+    },
+    {
+      "slug": "game_1_puzzle",
+      "url": "https://static.prod-images.emergentagent.com/jobs/e0594913-dd3e-46c5-b22b-974ab9719c81/images/be18ff78df4fda015dbe5866f1293b5b89464d4a2afee198d9f3f26fd4f3949f.png",
+      "description": "Abstract 3D memory match cards floating in a void. Use as the background or thumbnail for the Puzzle Game card.",
+      "category": "game_thumbnail"
+    },
+    {
+      "slug": "game_2_arcade",
+      "url": "https://static.prod-images.emergentagent.com/jobs/e0594913-dd3e-46c5-b22b-974ab9719c81/images/e62b380448ebc755137fbed1257320850d77ca4cfffc4110f4986400a23cb54c.png",
+      "description": "Retro futuristic glowing neon snake game grid. Use as the background or thumbnail for the Arcade (Snake) Game card.",
+      "category": "game_thumbnail"
+    },
+    {
+      "slug": "game_3_reflex",
+      "url": "https://static.prod-images.emergentagent.com/jobs/e0594913-dd3e-46c5-b22b-974ab9719c81/images/2e6a1399303b5cad6a44102bbdd3b797eda8f7cbf164dc5c4727fc0070007631.png",
+      "description": "Abstract futuristic glowing buttons on a metallic surface. Use as the background or thumbnail for the Reflex Game card.",
+      "category": "game_thumbnail"
+    },
+    {
+      "slug": "game_4_casual",
+      "url": "https://static.prod-images.emergentagent.com/jobs/e0594913-dd3e-46c5-b22b-974ab9719c81/images/660ccfde54cad825d3cc2659c977f26109f32311a2397bd95a9092071889dfad.png",
+      "description": "Stylized 3D glowing neon dice rolling. Use as the background or thumbnail for the Casual (Dice) Game card.",
+      "category": "game_thumbnail"
+    }
+  ],
+  "instructions_to_main_agent": [
+    "1. Setup fonts: Import 'Unbounded' and 'JetBrains Mono' from Google Fonts and configure them in Tailwind.",
+    "2. Setup global CSS: Apply the deep void black (#05050A) to the body. Ensure custom scrollbars are implemented (no gutter).",
+    "3. Install required libraries: framer-motion for animations, react-tsparticles for the interactive background, lucide-react (or similar) for icons.",
+    "4. Background Implementation: Add a fixed particles background behind the main content that reacts to mouse movement (connecting lines or repulsing nodes).",
+    "5. Layout Implementation: Create a Bento Grid layout. The largest cell is the MultiDrive CTA. The remaining 4 cells are the interactive games.",
+    "6. MultiDrive Integration: Use Shadcn Dialog for the MultiDrive button. The modal should show 'Powered by MultiNet' using JetBrains Mono, then present an 'Access Drive' button linking to cloud.multifocus.com.",
+    "7. Games Implementation: For the 4 games, create actual mini React components (a simple memory match, a grid-based snake, a reflex clicker, and a random dice roller). Open them via Shadcn Dialogs when their respective bento cards are clicked.",
+    "8. Visual Polish: Ensure cards have an overlay using the provided image_urls (opacity-40, mix-blend-screen/overlay) over dark backgrounds, with sharp neon borders on hover. Texts must use high contrast.",
+    "9. Test IDs: Ensure all interactive elements (buttons, game tiles, modals) have explicit 'data-testid' attributes (e.g., data-testid='multidrive-trigger')."
+  ]
+}
