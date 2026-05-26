@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Particles from 'react-tsparticles';
 import { loadSlim } from 'tsparticles-slim';
-import { Cloud, Gamepad2, Puzzle, Zap, Dices } from 'lucide-react';
+import { Cloud, Gamepad2, Puzzle, Zap, Dices, Volume2, VolumeX } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import MemoryMatch from '@/components/games/MemoryMatch';
 import NeonSnake from '@/components/games/NeonSnake';
@@ -14,6 +14,9 @@ function App() {
   const [multiDriveOpen, setMultiDriveOpen] = useState(false);
   const [activeGame, setActiveGame] = useState(null);
   const [redirecting, setRedirecting] = useState(false);
+  const [showKineticIntro, setShowKineticIntro] = useState(false);
+  const [musicOn, setMusicOn] = useState(false);
+  const audioRef = useRef(null);
 
   const particlesInit = useCallback(async (engine) => {
     await loadSlim(engine);
@@ -21,16 +24,36 @@ function App() {
 
   const handleMultiDriveClick = () => {
     setMultiDriveOpen(true);
+    setShowKineticIntro(true);
+    setTimeout(() => {
+      setShowKineticIntro(false);
+    }, 2800);
   };
 
   const handleRedirect = () => {
     setRedirecting(true);
     setTimeout(() => {
-      window.open('https://cloud.multifocus.com', '_blank');
+      window.open('https://cloud.multigroup.my.id', '_blank');
       setRedirecting(false);
       setMultiDriveOpen(false);
     }, 1500);
   };
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+    if (musicOn) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch(() => {});
+    }
+    setMusicOn(!musicOn);
+  };
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
+    }
+  }, []);
 
   const particlesConfig = {
     fullScreen: {
@@ -172,6 +195,37 @@ function App() {
         init={particlesInit}
         options={particlesConfig}
       />
+
+      {/* Background Music */}
+      <audio
+        ref={audioRef}
+        loop
+        src="https://cdn.pixabay.com/audio/2022/10/30/audio_347111d654.mp3"
+        data-testid="bg-music-audio"
+      />
+
+      {/* Music Toggle Button */}
+      <motion.button
+        onClick={toggleMusic}
+        data-testid="music-toggle-btn"
+        className="fixed top-6 right-6 z-50 w-12 h-12 bg-surface border border-border-default rounded-full flex items-center justify-center"
+        whileHover={{ 
+          scale: 1.1, 
+          boxShadow: '0 0 20px rgba(5, 217, 232, 0.6)',
+          borderColor: 'rgba(5, 217, 232, 0.8)'
+        }}
+        whileTap={{ scale: 0.9 }}
+        animate={musicOn ? { 
+          boxShadow: ['0 0 5px rgba(1, 255, 195, 0.3)', '0 0 15px rgba(1, 255, 195, 0.6)', '0 0 5px rgba(1, 255, 195, 0.3)']
+        } : {}}
+        transition={{ duration: 1.5, repeat: musicOn ? Infinity : 0 }}
+      >
+        {musicOn ? (
+          <Volume2 className="w-5 h-5 text-accent-green" />
+        ) : (
+          <VolumeX className="w-5 h-5 text-text-secondary" />
+        )}
+      </motion.button>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-12 md:py-24">
         {/* Header */}
@@ -339,36 +393,99 @@ function App() {
               MultiDrive Access
             </DialogTitle>
           </DialogHeader>
-          <div className="py-8 text-center">
-            {!redirecting ? (
-              <>
-                <Cloud className="w-20 h-20 mx-auto mb-6 text-accent-cyan" />
-                <p className="text-text-secondary mb-2 text-sm">Secure Cloud Storage Platform</p>
-                <p className="text-text-accent font-body text-xs tracking-wider uppercase mb-8">
-                  Powered by MultiNet
-                </p>
-                <motion.button
-                  onClick={handleRedirect}
-                  data-testid="multidrive-access-btn"
-                  className="w-full px-6 py-3 bg-accent-cyan text-background font-bold rounded-lg"
-                  whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(5, 217, 232, 0.5)' }}
-                  whileTap={{ scale: 0.95 }}
+          <div className="py-8 text-center min-h-[280px] flex items-center justify-center">
+            <AnimatePresence mode="wait">
+              {showKineticIntro ? (
+                <motion.div
+                  key="kinetic"
+                  className="w-full"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  data-testid="multidrive-kinetic-intro"
                 >
-                  Access Drive
-                </motion.button>
-              </>
-            ) : (
-              <div className="flex flex-col items-center" data-testid="multidrive-redirecting">
-                <div className="w-16 h-16 mb-4">
+                  <div className="flex justify-center items-center gap-1 flex-wrap mb-4">
+                    {'POWERED BY'.split('').map((char, i) => (
+                      <motion.span
+                        key={`p-${i}`}
+                        initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                        transition={{ delay: i * 0.05, duration: 0.4 }}
+                        className="text-xl font-heading font-black uppercase text-text-secondary tracking-wider"
+                      >
+                        {char === ' ' ? '\u00A0' : char}
+                      </motion.span>
+                    ))}
+                  </div>
+                  <div className="flex justify-center items-center gap-1 flex-wrap">
+                    {'MULTINET'.split('').map((char, i) => (
+                      <motion.span
+                        key={`m-${i}`}
+                        initial={{ opacity: 0, y: 30, filter: 'blur(12px)', scale: 0.5 }}
+                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)', scale: 1 }}
+                        transition={{ delay: 0.6 + i * 0.08, duration: 0.5, type: 'spring' }}
+                        className="text-4xl font-heading font-black uppercase text-accent-cyan"
+                        style={{ textShadow: '0 0 20px rgba(5, 217, 232, 0.8)' }}
+                      >
+                        {char}
+                      </motion.span>
+                    ))}
+                  </div>
                   <motion.div
-                    className="w-full h-full border-4 border-accent-cyan border-t-transparent rounded-full"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                    className="mt-6 h-[2px] mx-auto bg-gradient-to-r from-transparent via-accent-cyan to-transparent"
+                    initial={{ width: 0 }}
+                    animate={{ width: '100%' }}
+                    transition={{ delay: 1.5, duration: 1 }}
                   />
-                </div>
-                <p className="text-accent-cyan font-bold">Redirecting to MultiDrive...</p>
-              </div>
-            )}
+                </motion.div>
+              ) : !redirecting ? (
+                <motion.div
+                  key="info"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4 }}
+                  className="w-full"
+                >
+                  <Cloud className="w-20 h-20 mx-auto mb-6 text-accent-cyan" />
+                  <p className="text-text-secondary mb-2 text-sm">Secure Cloud Storage Platform</p>
+                  <motion.div
+                    className="inline-block px-4 py-1.5 mb-8 border border-accent-green rounded-full"
+                    animate={{ boxShadow: ['0 0 5px rgba(1, 255, 195, 0.3)', '0 0 20px rgba(1, 255, 195, 0.6)', '0 0 5px rgba(1, 255, 195, 0.3)'] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <p className="text-text-accent font-body text-xs tracking-wider uppercase">
+                      Powered by MultiNet
+                    </p>
+                  </motion.div>
+                  <motion.button
+                    onClick={handleRedirect}
+                    data-testid="multidrive-access-btn"
+                    className="w-full px-6 py-3 bg-accent-cyan text-background font-bold rounded-lg"
+                    whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(5, 217, 232, 0.5)' }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Access Drive
+                  </motion.button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="redirect"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex flex-col items-center"
+                  data-testid="multidrive-redirecting"
+                >
+                  <div className="w-16 h-16 mb-4">
+                    <motion.div
+                      className="w-full h-full border-4 border-accent-cyan border-t-transparent rounded-full"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                    />
+                  </div>
+                  <p className="text-accent-cyan font-bold">Redirecting to MultiDrive...</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </DialogContent>
       </Dialog>
